@@ -1,4 +1,4 @@
-package algorythm;
+package algorithm;
 
 public class HammiltionCode {
 }
