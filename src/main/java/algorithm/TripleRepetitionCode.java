@@ -12,7 +12,7 @@ public class TripleRepetitionCode implements Coder, Decoder {
         if(!searchNonDigit(message))
         {
             System.err.println("Message: " + message + " conatins non digit. Illegal form !! Aborting...");
-            return message;
+            return null;
         }
         message = convertToBinaryString(message);
         return tripleEachBit(message);
@@ -32,7 +32,6 @@ public class TripleRepetitionCode implements Coder, Decoder {
         for (char bit:message.toCharArray()) {
             codedMessage.append(StringUtils.repeat(Character.toString(bit),3));
         }
-        System.out.println(codedMessage.toString());
         return codedMessage.toString();
     }
     private char decodeTriples(String tripleValue) {
