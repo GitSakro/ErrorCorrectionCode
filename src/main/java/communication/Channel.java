@@ -16,6 +16,7 @@ public class Channel {
         System.out.println("After negation: " + inMessage);
     }
 
+    // TODO: AREK SHOULD FIX
     private void negateBitAtPosition(int position) {
         inMessage = inMessage.substring(0, position) + reverseBit(inMessage.charAt(position)) + inMessage.substring(position + 1);
     }

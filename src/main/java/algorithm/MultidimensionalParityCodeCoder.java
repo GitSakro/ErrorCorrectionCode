@@ -108,7 +108,6 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     @Override
     public String decode(String message) {
         message = Utils.convertBinaryToMessage(message);
-        System.out.println("MESS " + message);
 
         int contentLength = getEncodedMessageLength(message);
 

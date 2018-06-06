@@ -67,12 +67,12 @@
                                     <Insets top="10.0" />
                                  </HBox.margin>
                                  <children>
-                                    <RadioButton fx:id="fxml_NegateRandomBit" mnemonicParsing="false" text="Negate Random Bit">
+                                    <RadioButton fx:id="fxml_NegateRandomBit" mnemonicParsing="false" text="Negate Random Bit" userData="negateBit">
                                        <toggleGroup>
-                                          <ToggleGroup fx:id="NegateBitsGroup" />
+                                          <ToggleGroup fx:id="negateBitsGroup" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="fxml_NegeteRandomBits" mnemonicParsing="false" prefHeight="17.0" prefWidth="130.0" text="Negate Random Bits" toggleGroup="$NegateBitsGroup" />
+                                    <RadioButton fx:id="fxml_NegeteRandomBits" mnemonicParsing="false" prefHeight="17.0" prefWidth="130.0" userData="negateBits" text="Negate Random Bits" toggleGroup="$negateBitsGroup" />
                                  </children>
                                  <padding>
                                     <Insets top="20.0" />
@@ -84,7 +84,7 @@
                                  </padding>
                                  <children>
                                     <Region prefHeight="21.0" prefWidth="165.0" />
-                                    <TextField fx:id="fxml_bitsToNegate" prefHeight="25.0" prefWidth="56.0" promptText="Bits" visible="false" />
+                                    <TextField fx:id="fxml_bitsToNegate" prefHeight="25.0" prefWidth="56.0" promptText="Bits" visible="true" />
                                  </children>
                               </VBox>
                            </children>
@@ -105,13 +105,13 @@
                               </VBox>
                               <VBox prefHeight="75.0" prefWidth="199.0" spacing="10.0">
                                  <children>
-                                    <RadioButton fx:id="fxml_Triple" mnemonicParsing="false" text="Triple Repetition Code">
+                                    <RadioButton fx:id="fxml_Triple" mnemonicParsing="false" text="Triple Repetition Code" userData="triple">
                                        <toggleGroup>
-                                          <ToggleGroup fx:id="AlgorithmGroup" />
+                                          <ToggleGroup fx:id="algorithmGroup" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="fxml_ParitiCode" mnemonicParsing="false" prefHeight="20.0" prefWidth="182.0" text="Multidimensional Pariti Code" toggleGroup="$AlgorithmGroup" />
-                                    <RadioButton fx:id="fxml_Hamilton" mnemonicParsing="false" prefHeight="17.0" prefWidth="130.0" text="Hamilton Code" toggleGroup="$AlgorithmGroup" />
+                                    <RadioButton fx:id="fxml_ParitiCode" mnemonicParsing="false" prefHeight="20.0" prefWidth="182.0" text="Multidimensional Parity Code" toggleGroup="$algorithmGroup" userData="parity"/>
+                                    <RadioButton fx:id="fxml_Hamming" mnemonicParsing="false" prefHeight="17.0" prefWidth="130.0" text="Hamming Code" toggleGroup="$algorithmGroup" userData="hamming"/>
                                  </children>
                                  <padding>
                                     <Insets top="20.0" />
@@ -156,7 +156,7 @@
                               </Text>
                               <ScrollPane blendMode="MULTIPLY" maxWidth="263.0">
                                  <content>
-                                    <Text fx:id="fxml_BitsReciver2" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+                                    <Text fx:id="fxml_BitsTransmitter2" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
                                        <font>
                                           <Font size="43.0" />
                                        </font>
@@ -177,14 +177,14 @@
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
                               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a1f7aa" height="146.0" stroke="BLACK" strokeType="INSIDE" width="265.0" />
-                              <Text fx:id="fxml_BitsTransmitter1" opacity="0.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Bits" textAlignment="CENTER" wrappingWidth="250.0">
+                              <Text fx:id="fxml_BitsChannel" opacity="0.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Bits" textAlignment="CENTER" wrappingWidth="250.0">
                                  <font>
                                     <Font size="43.0" />
                                  </font>
                               </Text>
                               <ScrollPane blendMode="MULTIPLY" maxWidth="263.0">
                                  <content>
-                                    <Text fx:id="fxml_BitsReciver1" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+                                    <Text fx:id="fxml_BitsChannel2" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
                                        <font>
                                           <Font size="43.0" />
                                        </font>
@@ -197,7 +197,7 @@
                   </VBox>
                   <VBox prefHeight="233.0" prefWidth="343.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="274.0" text="Reciver">
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="274.0" text="Receiver">
                            <font>
                               <Font size="19.0" />
                            </font>
@@ -205,14 +205,14 @@
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
                               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a0cef8" height="146.0" stroke="BLACK" strokeType="INSIDE" width="265.0" />
-                              <Text fx:id="fxml_BitsTransmitter11" opacity="0.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Bits" textAlignment="CENTER" wrappingWidth="250.0">
+                              <Text fx:id="fxml_BitsReceiver" opacity="0.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Bits" textAlignment="CENTER" wrappingWidth="250.0">
                                  <font>
                                     <Font size="43.0" />
                                  </font>
                               </Text>
                               <ScrollPane blendMode="MULTIPLY" maxWidth="263.0">
                                  <content>
-                                    <Text fx:id="fxml_BitsReciver" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+                                    <Text fx:id="fxml_BitsReceiver2" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
                                        <font>
                                           <Font size="43.0" />
                                        </font>
@@ -225,7 +225,7 @@
                   </VBox>
                </children>
             </HBox>
-            <Label fx:id="fxml_Communicat" prefHeight="27.0" prefWidth="967.0" text="System Communicats: ">
+            <Label fx:id="fxml_Communicat" prefHeight="27.0" prefWidth="967.0" text="System communicat: ">
                <font>
                   <Font size="18.0" />
                </font>
