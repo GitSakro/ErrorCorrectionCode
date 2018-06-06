@@ -5,30 +5,48 @@ import communication.Receiver;
 import communication.Transmitter;
 import algorithm.TripleRepetitionCode;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
+    public TextField fxml_bitsInput;
+//    @FXML
+//    public TextField fxml_bitInput,fxml_bitsToNegate ;
+    @FXML
+    private Text fxml_BitsTransmitter, fxml_BitsChannel, fxml_BitsReciver;
+    @FXML
+    private ToggleGroup NegateBitsGroup, AlgorithmGroup;
+
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(e -> {
-            System.out.println("Hello World!");
-        });
-        transmision();
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+    public void start(Stage primaryStage) throws Exception {
 
-        Scene scene = new Scene(root, 300, 250);
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
 
-        primaryStage.setTitle("Hello World!");
+        Scene scene = new Scene(root,  913.0,434.0);
+        primaryStage.setResizable(false);
+
+        primaryStage.setTitle("FXML Welcome");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
 
+    }
+    @FXML
+    private void onSaveBits(ActionEvent event){
+
+        String a = fxml_bitsInput.getText();
+        fxml_BitsTransmitter.setText(a);
+    }
+    @FXML
+    private void onStartTransmission(ActionEvent event){
+
+    }
     public static void main(String[] args) {
         launch(args);
     }
