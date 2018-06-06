@@ -94,19 +94,6 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         }
     }
 
-    // for debug purposes only
-    private void printMatrix(char[][] matrix) {
-        System.out.println("Matrix [" + matrix.length + "][" + matrix[0].length + "]");
-        System.out.println("______");
-        for (char[] carr : matrix) {
-            for (char ch : carr) {
-                System.out.print(ch + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("______");
-    }
-
     private String matrixToString(char[][] matrix) {
         StringBuilder builder = new StringBuilder();
         for (char[] matrixRow : matrix) {
@@ -193,24 +180,5 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         int validValue = rowSums.get(invalidRow) - (rowSum - Utils.charToInt(matrix[invalidRow][invalidColumn]));
 
         matrix[invalidRow][invalidColumn] = Utils.intToCharArray(validValue)[0];
-    }
-
-    public static void main(String[] args) {
-        MultidimensionalParityCodeCoder coder = new MultidimensionalParityCodeCoder();
-
-        String input = "12345678";
-//        String input = "10101201";
-        System.out.println("INPUT\t" + input);
-//        System.out.println(Utils.convertToBinaryString(input));
-//        System.out.println(Utils.convertMessageToBinary(input));
-
-        String encoded = coder.encode(input);
-        System.out.println("ENCODED\n" + encoded);
-
-        String decoded = coder.decode(encoded);
-        System.out.println("DECODED\n" + decoded);
-//        decoded = "1436   45615  78 15  119    25                   ";
-//        decoded = "2236   45615  78 15  119    25                   ";
-//        System.out.println(coder.decode(decoded));
     }
 }
