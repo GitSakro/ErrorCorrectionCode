@@ -32,11 +32,12 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void transmision(){
+
+    public void transmision() {
         Transmitter trans = new Transmitter();
-        String msg = "1101";
-        System.out.println("Message to be sent:" +msg );
-        String sendedMessage = trans.sendMessage(msg,new TripleRepetitionCode());
+        String msg = "12314";
+        System.out.println("Message to be sent:" + msg);
+        String sendedMessage = trans.sendMessage(msg, new TripleRepetitionCode());
 
         Channel channel = new Channel();
         System.out.println("StartTransmision");
@@ -47,8 +48,8 @@ public class MainApp extends Application {
         System.out.println(channel.numberOfBitsInChannel());
 
         Receiver reciver = new Receiver();
-        String messageFromReciver = reciver.getMessage(channel.endTransmission(),new TripleRepetitionCode());
-        System.out.println("Recived message: " +messageFromReciver);
+        String messageFromReciver = reciver.getMessage(channel.endTransmission(), new TripleRepetitionCode());
+        System.out.println("Recived message: " + messageFromReciver);
 
     }
 }

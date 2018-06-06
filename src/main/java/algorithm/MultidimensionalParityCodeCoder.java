@@ -1,16 +1,25 @@
 package algorithm;
 
+import utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     private static final int MARGIN = 4;
 
+    private enum Type {ROW, COLUMN;}
+
+    ;
+
     @Override
     public String encode(String message) {
         if (message == null || message.length() == 0) {
+//            throw new EmptyMessageException();
             return null;
         }
+
+//        message = Utils.convertToBinaryString(message);
 
         int len = message.length();
         int matrixRowLength = (int) Math.ceil(Math.sqrt(len));
@@ -36,15 +45,13 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
             insertColumnSum(columnSum, matrix, matrixRowLength, column);
         }
 
-        printMatrix(matrix);
-
         return matrixToString(matrix);
     }
 
     private int accumulateRow(char[] matrixRow) {
         int sum = 0;
         for (char c : matrixRow) {
-            if (c == '\u0000') {
+            if (Utils.isCharEmpty(c)) {
                 break;
             }
             sum += Integer.parseInt("" + c);
@@ -54,7 +61,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     }
 
     private void insertRowSum(int rowSum, char[] matrix, int matrixRowLength) {
-        char[] sum = ("" + rowSum).toCharArray();
+        char[] sum = Utils.intToCharArray(rowSum);
         if (sum.length > MARGIN) {
             System.err.println("DANGEROUS!!!");
         }
@@ -71,10 +78,10 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
                 System.err.println("DANGEROUSSS");
             }
 
-            if (chArr[column] == '\u0000') {
+            if (Utils.isCharEmpty(chArr[column])) {
                 break;
             }
-            sum += Integer.parseInt("" + chArr[column]);
+            sum += Utils.charToInt(chArr[column]);
         }
 
         return sum;
@@ -91,6 +98,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         }
     }
 
+    // for debug purposes only
     private void printMatrix(char[][] matrix) {
         System.out.println("Matrix [" + matrix.length + "][" + matrix[0].length + "]");
         System.out.println("______");
@@ -126,12 +134,9 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         int count = 0;
         for (int i = 0; count < contentLength && i + contentLength < message.length(); i += contentLength + MARGIN, ++count) {
             char[] content = message.substring(i, i + contentLength).toCharArray();
-
-            System.out.println("i=" + i + ", content = " + content[0]);
             matrix[count] = content;
 
             String rowContent = message.substring(i + contentLength, i + contentLength + MARGIN).trim();
-            System.out.println("rowContent = " + rowContent);
             rowSums.add(Integer.parseInt(rowContent));
         }
 
@@ -146,17 +151,8 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
             columnSums.add(Integer.parseInt(builder.toString().trim()));
         }
 
-        printMatrix(matrix);
-        System.out.println("rowumns = " + rowSums);
-        System.out.println("columnsumns = " + columnSums);
-
-        List<Integer> invalidRows = findInvalidRows(matrix, rowSums);
-        List<Integer> invalidColumns = findInvalidColumns(matrix, columnSums);
-
-        System.out.println("invalidRows " + invalidRows);
-        System.out.println("invalidColumns " + invalidColumns);
-
-//        printMatrix(matrix);
+        List<Integer> invalidRows = findInvalidRowOrColumn(Type.ROW, matrix, rowSums);
+        List<Integer> invalidColumns = findInvalidRowOrColumn(Type.COLUMN, matrix, columnSums);
 
         if (invalidColumns.size() == 1 && invalidRows.size() == 1) {
             fixMatrix(matrix, columnSums, rowSums, invalidColumns.get(0), invalidRows.get(0));
@@ -164,7 +160,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
             // throw exception???
         }
 
-        printMatrix(matrix);
+//        printMatrix(matrix);
 
         return matrixToString(matrix);
     }
@@ -173,45 +169,25 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         return ((int) Math.sqrt((double) message.length()) - MARGIN);
     }
 
-    private List<Integer> findInvalidRows(char[][] matrix, List<Integer> rowSums) {
-        List<Integer> invalidRows = new ArrayList<>();
+    private List<Integer> findInvalidRowOrColumn(Type type, char[][] matrix, List<Integer> sumsInRowOrColumn) {
+        List<Integer> invalid = new ArrayList<>();
 
         for (int i = 0; i < matrix.length; ++i) {
             int sum = 0;
+
             for (int j = 0; j < matrix[i].length; ++j) {
-                if (matrix[i][j] == '\u0000' || matrix[i][j] == ' ')
+                char charToCheck = type == Type.ROW ? matrix[i][j] : matrix[j][i];
+                if (Utils.isCharEmpty(charToCheck))
                     break;
-                sum += Integer.parseInt("" + matrix[i][j]);
+                sum += Integer.parseInt("" + charToCheck);
             }
 
-            if (sum != rowSums.get(i)) {
-                invalidRows.add(i);
+            if (sum != sumsInRowOrColumn.get(i)) {
+                invalid.add(i);
             }
         }
 
-        return invalidRows;
-    }
-
-    private List<Integer> findInvalidColumns(char[][] matrix, List<Integer> columnSums) {
-        List<Integer> invalidColumns = new ArrayList<>();
-
-        for (int i = 0; i < matrix.length; ++i) {
-            int sum = 0;
-            for (int j = 0; j < matrix[i].length; ++j) {
-                if (matrix[j][i] == '\u0000' || matrix[j][i] == ' ')
-                    break;
-
-                sum += Integer.parseInt("" + matrix[j][i]);
-            }
-
-            System.out.println("Sum = " + sum + ", colsum = " + columnSums.get(i));
-
-            if (sum != columnSums.get(i)) {
-                invalidColumns.add(i);
-            }
-        }
-
-        return invalidColumns;
+        return invalid;
     }
 
     private void fixMatrix(char[][] matrix, List<Integer> columnSums, List<Integer> rowSums, int invalidColumn, int invalidRow) {
@@ -230,8 +206,9 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         System.out.println(encoded);
 
         String decoded = coder.decode(encoded);
-        decoded = "2236   45615  78 15  119    25                   ";
-        decoded = "1436   45615  78 15  119    25                   ";
-        System.out.println(coder.decode(decoded));
+        System.out.println(decoded);
+//        decoded = "2236   45615  78 15  119    25                   ";
+//        decoded = "1436   45615  78 15  119    25                   ";
+//        System.out.println(coder.decode(decoded));
     }
 }
