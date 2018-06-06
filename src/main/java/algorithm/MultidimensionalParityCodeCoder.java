@@ -54,7 +54,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
             if (Utils.isCharEmpty(c)) {
                 break;
             }
-            sum += Integer.parseInt("" + c);
+            sum += Utils.charToInt(c);
         }
 
         return sum;
@@ -88,7 +88,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     }
 
     private void insertColumnSum(int columnSum, char[][] matrix, int matrixRowLength, int column) {
-        char[] sum = ("" + columnSum).toCharArray();
+        char[] sum = Utils.intToCharArray(columnSum);
         if (sum.length > MARGIN) {
             System.err.println("DANGEROUS!!!");
         }
@@ -160,8 +160,6 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
             // throw exception???
         }
 
-//        printMatrix(matrix);
-
         return matrixToString(matrix);
     }
 
@@ -179,7 +177,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
                 char charToCheck = type == Type.ROW ? matrix[i][j] : matrix[j][i];
                 if (Utils.isCharEmpty(charToCheck))
                     break;
-                sum += Integer.parseInt("" + charToCheck);
+                sum += Utils.charToInt(charToCheck);
             }
 
             if (sum != sumsInRowOrColumn.get(i)) {
@@ -192,9 +190,9 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
 
     private void fixMatrix(char[][] matrix, List<Integer> columnSums, List<Integer> rowSums, int invalidColumn, int invalidRow) {
         int rowSum = accumulateRow(matrix[invalidRow]);
-        int validValue = rowSums.get(invalidRow) - (rowSum - Integer.parseInt("" + matrix[invalidRow][invalidColumn]));
+        int validValue = rowSums.get(invalidRow) - (rowSum - Utils.charToInt(matrix[invalidRow][invalidColumn]));
 
-        matrix[invalidRow][invalidColumn] = ("" + validValue).toCharArray()[0];
+        matrix[invalidRow][invalidColumn] = Utils.intToCharArray(validValue)[0];
     }
 
     public static void main(String[] args) {
@@ -207,8 +205,8 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
 
         String decoded = coder.decode(encoded);
         System.out.println(decoded);
+        decoded = "1436   45615  78 15  119    25                   ";
 //        decoded = "2236   45615  78 15  119    25                   ";
-//        decoded = "1436   45615  78 15  119    25                   ";
-//        System.out.println(coder.decode(decoded));
+        System.out.println(coder.decode(decoded));
     }
 }

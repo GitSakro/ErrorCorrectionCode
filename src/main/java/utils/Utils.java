@@ -24,4 +24,8 @@ public class Utils {
     public static int charToInt(char ch) {
         return Integer.parseInt("" + ch);
     }
+
+    public static Boolean searchNonDigit(String message) {
+        return !Pattern.compile("\\D").matcher(message).find();
+    }
 }

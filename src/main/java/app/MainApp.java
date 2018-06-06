@@ -1,8 +1,8 @@
 package app;
 
-import CommunicationFlow.Channel;
-import CommunicationFlow.Receiver;
-import CommunicationFlow.Transmitter;
+import communication.Channel;
+import communication.Receiver;
+import communication.Transmitter;
 import algorithm.TripleRepetitionCode;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -41,7 +41,7 @@ public class MainApp extends Application {
 
         Channel channel = new Channel();
         System.out.println("StartTransmision");
-        channel.startTransmision(sendedMessage);
+        channel.startTransmission(sendedMessage);
         System.out.println("Negate random bit");
         channel.negateRandomBit();
         System.out.println("Number of bits in channel");

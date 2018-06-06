@@ -10,16 +10,12 @@ public class TripleRepetitionCode implements Coder, Decoder {
 
     @Override
     public String encode(String message) {
-        if (!searchNonDigit(message)) {
+        if (!Utils.searchNonDigit(message)) {
             System.err.println("Message: " + message + " conatins non digit. Illegal form !! Aborting...");
             return null;
         }
         message = Utils.convertToBinaryString(message);
         return tripleEachBit(message);
-    }
-
-    private Boolean searchNonDigit(String message) {
-        return !Pattern.compile("\\D").matcher(message).find();
     }
 
     private String tripleEachBit(String message) {
@@ -50,7 +46,7 @@ public class TripleRepetitionCode implements Coder, Decoder {
 
     @Override
     public String decode(String message) {
-        if (message.length() % 3 != 0 && !searchNonDigit(message)) {
+        if (message.length() % 3 != 0 && !Utils.searchNonDigit(message)) {
             System.err.println("Message corupted");
             return null;
         }

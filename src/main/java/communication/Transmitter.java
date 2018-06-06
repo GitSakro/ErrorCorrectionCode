@@ -1,4 +1,4 @@
-package CommunicationFlow;
+package communication;
 
 import algorithm.Coder;
 
