@@ -14,7 +14,7 @@ public class HammingCode implements Coder, Decoder {
 
         if(!searchNonDigit(message))
         {
-            System.err.println("Message: " + message + " conatins non digit. Illegal form !! Aborting...");
+            System.err.println("Message: " + message + " contains non digit. Illegal form, aborting!");
             return message;
         }
         message = convertToBinaryString(message);
@@ -35,7 +35,7 @@ public class HammingCode implements Coder, Decoder {
     @Override
     public String decode(String message) {
         if (!Utils.searchNonDigit(message)) {
-            System.err.println("Message corupted");
+            System.err.println("Message corrupted");
             return null;
         }
         message = new StringBuilder(message).reverse().toString();

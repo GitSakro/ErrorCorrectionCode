@@ -8,18 +8,14 @@ import java.util.List;
 public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     private static final int MARGIN = 4;
 
-    private enum Type {ROW, COLUMN;}
-
-    ;
+    private enum Type {ROW, COLUMN;};
 
     @Override
     public String encode(String message) {
         if (message == null || message.length() == 0) {
-//            throw new EmptyMessageException();
+            System.err.println("Trying to encode empty message!");
             return null;
         }
-
-//        message = Utils.convertToBinaryString(message);
 
         int len = message.length();
         int matrixRowLength = (int) Math.ceil(Math.sqrt(len));
@@ -45,7 +41,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
             insertColumnSum(columnSum, matrix, matrixRowLength, column);
         }
 
-        return matrixToString(matrix);
+        return Utils.convertMessageToBinary(matrixToString(matrix));
     }
 
     private int accumulateRow(char[] matrixRow) {
@@ -124,6 +120,9 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
 
     @Override
     public String decode(String message) {
+        message = Utils.convertBinaryToMessage(message);
+        System.out.println("MESS " + message);
+
         int contentLength = getEncodedMessageLength(message);
 
         char[][] matrix = new char[contentLength][contentLength];
@@ -157,7 +156,8 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         if (invalidColumns.size() == 1 && invalidRows.size() == 1) {
             fixMatrix(matrix, columnSums, rowSums, invalidColumns.get(0), invalidRows.get(0));
         } else if (invalidColumns.size() > 1 || invalidRows.size() > 1) {
-            // throw exception???
+            System.err.println("Message corrupted");
+            return null;
         }
 
         return matrixToString(matrix);
@@ -199,14 +199,18 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         MultidimensionalParityCodeCoder coder = new MultidimensionalParityCodeCoder();
 
         String input = "12345678";
+//        String input = "10101201";
+        System.out.println("INPUT\t" + input);
+//        System.out.println(Utils.convertToBinaryString(input));
+//        System.out.println(Utils.convertMessageToBinary(input));
 
         String encoded = coder.encode(input);
-        System.out.println(encoded);
+        System.out.println("ENCODED\n" + encoded);
 
         String decoded = coder.decode(encoded);
-        System.out.println(decoded);
-        decoded = "1436   45615  78 15  119    25                   ";
+        System.out.println("DECODED\n" + decoded);
+//        decoded = "1436   45615  78 15  119    25                   ";
 //        decoded = "2236   45615  78 15  119    25                   ";
-        System.out.println(coder.decode(decoded));
+//        System.out.println(coder.decode(decoded));
     }
 }

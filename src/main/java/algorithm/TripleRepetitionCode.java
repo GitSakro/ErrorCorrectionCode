@@ -11,7 +11,7 @@ public class TripleRepetitionCode implements Coder, Decoder {
     @Override
     public String encode(String message) {
         if (!Utils.searchNonDigit(message)) {
-            System.err.println("Message: " + message + " conatins non digit. Illegal form !! Aborting...");
+            System.err.println("Message: " + message + " contains non digit. Illegal form, aborting!");
             return null;
         }
         message = Utils.convertToBinaryString(message);
@@ -38,16 +38,18 @@ public class TripleRepetitionCode implements Coder, Decoder {
             }
             countOne++;
         }
+
         if (countZero > countOne) {
             return '0';
         }
+
         return '1';
     }
 
     @Override
     public String decode(String message) {
         if (message.length() % 3 != 0 && !Utils.searchNonDigit(message)) {
-            System.err.println("Message corupted");
+            System.err.println("Message corrupted");
             return null;
         }
         StringBuilder decodedMessage = new StringBuilder();
