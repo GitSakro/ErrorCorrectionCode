@@ -20,8 +20,8 @@ public class HammingCode implements Coder, Decoder {
         message = convertToBinaryString(message);
         message = new StringBuilder(message).reverse().toString();
 
-        int bitsNeeded = checkBitsNeeded(message, true);
         message = addHammingSigns(message);
+        int bitsNeeded = checkBitsNeeded(message);
         ArrayList<Integer> positiveBitsPosition = getPositiveBitsPosition(message);
         ArrayList<Integer> parityBits = getParityBits(positiveBitsPosition, bitsNeeded);
 
@@ -40,7 +40,7 @@ public class HammingCode implements Coder, Decoder {
         }
         message = new StringBuilder(message).reverse().toString();
 
-        int bitsNeeded = checkBitsNeeded(message, false);
+        int bitsNeeded = checkBitsNeeded(message);
         ArrayList<Integer> positiveBitsPosition = getPositiveBitsPosition(message);
         ArrayList<Integer> parityBits = getParityBits(positiveBitsPosition, bitsNeeded);
 
@@ -63,12 +63,10 @@ public class HammingCode implements Coder, Decoder {
         return new StringBuilder(result.toString()).reverse().toString();
     }
 
-    private int checkBitsNeeded(String message, boolean addLength) {
+    private int checkBitsNeeded(String message) {
         int bitsNeeded = 0;
-        int length = message.length();
-        for (int i = 1; i <= length; i *= 2) {
+        for (int i = 1; i <= message.length(); i *= 2) {
             bitsNeeded++;
-            if (addLength) length++;
         }
         return bitsNeeded;
     }
