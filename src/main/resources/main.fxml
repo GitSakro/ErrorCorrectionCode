@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="434.0" prefWidth="913.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.MainApp">
+   <children>
+      <SplitPane dividerPositions="0.45348837209302323, 0.5" layoutX="7.0" orientation="VERTICAL" prefHeight="346.0" prefWidth="918.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+            <VBox prefHeight="193.0" prefWidth="911.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="913.0" text="Control Panel">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="909.0" spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="87.0" prefWidth="205.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Input:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <TextField fx:id="fxml_bitsInput" />
+                                    <Button mnemonicParsing="false" onAction="#onSaveBits" prefHeight="36.0" prefWidth="95.0" text="Save" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="101.0" prefWidth="469.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="90.0" prefWidth="183.0" spacing="10.0">
+                                 <children>
+                                    <Label prefHeight="32.0" prefWidth="181.0" text="Transmision Options:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox prefHeight="90.0" prefWidth="142.0" spacing="10.0">
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                                 <children>
+                                    <RadioButton fx:id="fxml_NegateRandomBit" mnemonicParsing="false" text="Negate Random Bit">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="NegateBitsGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="fxml_NegeteRandomBits" mnemonicParsing="false" prefHeight="17.0" prefWidth="130.0" text="Negate Random Bits" toggleGroup="$NegateBitsGroup" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox prefHeight="92.0" prefWidth="58.0" spacing="10.0">
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                                 <children>
+                                    <Region prefHeight="21.0" prefWidth="165.0" />
+                                    <TextField fx:id="fxml_bitsToNegate" prefHeight="25.0" prefWidth="56.0" promptText="Bits" visible="false" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="101.0" prefWidth="429.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="68.0" prefWidth="97.0" spacing="10.0">
+                                 <children>
+                                    <Label prefHeight="29.0" prefWidth="93.0" text="Algorithm:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox prefHeight="75.0" prefWidth="199.0" spacing="10.0">
+                                 <children>
+                                    <RadioButton fx:id="fxml_Triple" mnemonicParsing="false" text="Triple Repetition Code">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="AlgorithmGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="fxml_ParitiCode" mnemonicParsing="false" prefHeight="20.0" prefWidth="182.0" text="Multidimensional Pariti Code" toggleGroup="$AlgorithmGroup" />
+                                    <RadioButton fx:id="fxml_Hamilton" mnemonicParsing="false" prefHeight="17.0" prefWidth="130.0" text="Hamilton Code" toggleGroup="$AlgorithmGroup" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="909.0" spacing="60.0">
+                     <children>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onStartTransmission" prefHeight="25.0" prefWidth="306.0" text="Start Transmission" textAlignment="CENTER" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+               <children>
+                  <VBox prefHeight="233.0" prefWidth="343.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="274.0" text="Transmitter">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Label>
+                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a0cef8" height="146.0" stroke="BLACK" strokeType="INSIDE" width="265.0" />
+                              <Text fx:id="fxml_BitsTransmitter" opacity="0.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Bits" textAlignment="CENTER" wrappingWidth="250.0">
+                                 <font>
+                                    <Font size="43.0" />
+                                 </font>
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Text>
+                              <ScrollPane blendMode="MULTIPLY" maxWidth="263.0">
+                                 <content>
+                                    <Text fx:id="fxml_BitsReciver2" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+                                       <font>
+                                          <Font size="43.0" />
+                                       </font>
+                                    </Text>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="233.0" prefWidth="343.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="273.0" text="Channel">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Label>
+                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a1f7aa" height="146.0" stroke="BLACK" strokeType="INSIDE" width="265.0" />
+                              <Text fx:id="fxml_BitsTransmitter1" opacity="0.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Bits" textAlignment="CENTER" wrappingWidth="250.0">
+                                 <font>
+                                    <Font size="43.0" />
+                                 </font>
+                              </Text>
+                              <ScrollPane blendMode="MULTIPLY" maxWidth="263.0">
+                                 <content>
+                                    <Text fx:id="fxml_BitsReciver1" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+                                       <font>
+                                          <Font size="43.0" />
+                                       </font>
+                                    </Text>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="233.0" prefWidth="343.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="274.0" text="Reciver">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Label>
+                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a0cef8" height="146.0" stroke="BLACK" strokeType="INSIDE" width="265.0" />
+                              <Text fx:id="fxml_BitsTransmitter11" opacity="0.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Bits" textAlignment="CENTER" wrappingWidth="250.0">
+                                 <font>
+                                    <Font size="43.0" />
+                                 </font>
+                              </Text>
+                              <ScrollPane blendMode="MULTIPLY" maxWidth="263.0">
+                                 <content>
+                                    <Text fx:id="fxml_BitsReciver" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
+                                       <font>
+                                          <Font size="43.0" />
+                                       </font>
+                                    </Text>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Label fx:id="fxml_Communicat" prefHeight="27.0" prefWidth="967.0" text="System Communicats: ">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

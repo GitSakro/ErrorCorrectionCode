@@ -3,44 +3,50 @@ package app;
 import CommunicationFlow.Channel;
 import CommunicationFlow.Receiver;
 import CommunicationFlow.Transmitter;
-import JavaFxHelpers.Shapes;
 import algorithm.TripleRepetitionCode;
 import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
+    public TextField fxml_bitsInput;
+//    @FXML
+//    public TextField fxml_bitInput,fxml_bitsToNegate ;
+    @FXML
+    private Text fxml_BitsTransmitter, fxml_BitsChannel, fxml_BitsReciver;
+    @FXML
+    private ToggleGroup NegateBitsGroup, AlgorithmGroup;
+
     @Override
-    public void start(Stage primaryStage) {
-        Rectangle rectangle = Shapes.createRectangle(50.0f,75.0f,300.0f,150.0f);
-        Rectangle rectangle2 = Shapes.createRectangle(650.0f,75.0f,300.0f,150.0f);
+    public void start(Stage primaryStage) throws Exception {
 
-        rectangle.setFill(Paint.valueOf("yellow"));
-        StackPane rectanglePane = new StackPane();
-        rectanglePane.getChildren().add(rectangle);
-        rectanglePane.getChildren().add(new Label("Kotek"));
-        //Creating a Group object
-        Group root = new Group(rectanglePane);
-        root.getChildren().add(rectangle2);
-        //Creating a scene object
-        Scene scene = new Scene(root, 1000, 300);
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
 
-        //Setting title to the Stage
-        primaryStage.setTitle("Drawing a Rectangle");
+        Scene scene = new Scene(root,  913.0,434.0);
+        primaryStage.setResizable(false);
 
-        //Adding scene to the stage
+        primaryStage.setTitle("FXML Welcome");
         primaryStage.setScene(scene);
-
-        //Displaying the contents of the stage
         primaryStage.show();
-    }
 
+    }
+    @FXML
+    private void onSaveBits(ActionEvent event){
+
+        String a = fxml_bitsInput.getText();
+        fxml_BitsTransmitter.setText(a);
+    }
+    @FXML
+    private void onStartTransmission(ActionEvent event){
+
+    }
     public static void main(String[] args) {
         launch(args);
     }
