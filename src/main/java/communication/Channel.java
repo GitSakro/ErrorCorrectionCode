@@ -18,7 +18,10 @@ public class Channel {
 
     // TODO: AREK SHOULD FIX
     private void negateBitAtPosition(int position) {
-        inMessage = inMessage.substring(0, position) + reverseBit(inMessage.charAt(position)) + inMessage.substring(position + 1);
+//        inMessage = inMessage.substring(0, position) + reverseBit(inMessage.charAt(position)) + inMessage.substring(position+1);
+        StringBuilder builder = new StringBuilder(inMessage);
+        builder.setCharAt(position,reverseBit(inMessage.charAt(position)));
+        inMessage = builder.toString();
     }
 
     private char reverseBit(char bit) {
@@ -37,8 +40,7 @@ public class Channel {
 
     private int getRandomBit() {
         Random rand = new Random();
-
-        return rand.nextInt((inMessage.length()) + 1);
+        return rand.nextInt((inMessage.length()));
     }
 
     public String endTransmission() {

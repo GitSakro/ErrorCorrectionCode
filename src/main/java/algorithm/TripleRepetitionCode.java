@@ -34,11 +34,11 @@ public class TripleRepetitionCode implements Coder, Decoder {
         for (char bit : tripleValue.toCharArray()) {
             if (bit == '0') {
                 countZero++;
-                continue;
             }
+            else{
             countOne++;
+            }
         }
-
         if (countZero > countOne) {
             return '0';
         }
@@ -49,12 +49,11 @@ public class TripleRepetitionCode implements Coder, Decoder {
     @Override
     public String decode(String message) {
         if (message.length() % 3 != 0 && !Utils.searchNonDigit(message)) {
-            System.err.println("Message corrupted");
             return null;
         }
         StringBuilder decodedMessage = new StringBuilder();
         for (int i = 0; i < message.length(); i += 3) {
-            decodedMessage.append(decodeTriples("" + message.charAt(i) + message.charAt(i + 1) + message.charAt(i + 1)));
+            decodedMessage.append(decodeTriples(message.substring(i,i+3)));
         }
 
         return decodedMessage.toString();
