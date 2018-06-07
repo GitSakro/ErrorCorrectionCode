@@ -8,7 +8,9 @@ import java.util.List;
 public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     private static final int MARGIN = 4;
 
-    private enum Type {ROW, COLUMN;};
+    private enum Type {ROW, COLUMN;}
+
+    ;
 
     @Override
     public String encode(String message) {
@@ -94,6 +96,19 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         }
     }
 
+    // for debug purposes only
+    private void printMatrix(char[][] matrix) {
+        System.out.println("Matrix [" + matrix.length + "][" + matrix[0].length + "]");
+        System.out.println("______");
+        for (char[] carr : matrix) {
+            for (char ch : carr) {
+                System.out.print(ch + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("______");
+    }
+
     private String matrixToString(char[][] matrix) {
         StringBuilder builder = new StringBuilder();
         for (char[] matrixRow : matrix) {
@@ -108,8 +123,10 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     @Override
     public String decode(String message) {
         message = Utils.convertBinaryToMessage(message);
+        System.out.println("MESS " + message);
 
         int contentLength = getEncodedMessageLength(message);
+        System.out.println("Content " + contentLength);
 
         char[][] matrix = new char[contentLength][contentLength];
 
@@ -117,23 +134,26 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         List<Integer> columnSums = new ArrayList<>();
 
         int count = 0;
+        printMatrix(matrix);
         for (int i = 0; count < contentLength && i + contentLength < message.length(); i += contentLength + MARGIN, ++count) {
             char[] content = message.substring(i, i + contentLength).toCharArray();
             matrix[count] = content;
 
-            String rowContent = message.substring(i + contentLength, i + contentLength + MARGIN).trim();
-            rowSums.add(Integer.parseInt(rowContent));
+            char number = message.charAt(i + contentLength);
+            if (!Utils.isCharEmpty(number)) {
+                rowSums.add(Utils.charToInt(number));
+            } else {
+                rowSums.add(0);
+            }
         }
 
         for (int i = (contentLength + MARGIN) * contentLength; i < (contentLength + MARGIN) * contentLength + contentLength; ++i) {
-            int j = i;
-            StringBuilder builder = new StringBuilder();
-            while (j < message.length()) {
-                builder.append(message.charAt(j));
-                j += (contentLength + MARGIN);
+            char number = message.charAt(i);
+            if (!Utils.isCharEmpty(number)) {
+                columnSums.add(Utils.charToInt(number));
+            } else {
+                columnSums.add(0);
             }
-
-            columnSums.add(Integer.parseInt(builder.toString().trim()));
         }
 
         List<Integer> invalidRows = findInvalidRowOrColumn(Type.ROW, matrix, rowSums);

@@ -52,13 +52,11 @@ public class MainApp extends Application {
     }
 
     @FXML
-    private void onSaveBits(ActionEvent event) {
-        String a = fxml_bitsInput.getText();
-        fxml_BitsTransmitter2.setText(Utils.convertToBinaryString(a));
-    }
-
-    @FXML
     private void onStartTransmission(ActionEvent event) {
+        fxml_BitsTransmitter2.setText("");
+        fxml_Communicat.setText("");
+        fxml_BitsReceiver2.setText("");
+
         String message = fxml_bitsInput.getText();
         AlgorithmType algType = getAlgorithmType();
         NegateType negType = getNegateType();
@@ -72,9 +70,9 @@ public class MainApp extends Application {
         System.out.println("Message to be sent:" + message);
 
         String sentMessage = null;
-
         switch (algType) {
             case Triple:
+                fxml_BitsTransmitter2.setText(message);
                 sentMessage = trans.sendMessage(message, new TripleRepetitionCode());
                 break;
             case Multidimensional:
@@ -82,6 +80,7 @@ public class MainApp extends Application {
                 sentMessage = trans.sendMessage(message, new MultidimensionalParityCodeCoder());
                 break;
             case Hamming:
+                fxml_BitsTransmitter2.setText(message);
                 sentMessage = trans.sendMessage(message, new HammingCode());
                 break;
         }
@@ -102,7 +101,6 @@ public class MainApp extends Application {
                 break;
             case Bits:
                 try {
-                    Integer.parseInt(fxml_bitsToNegate.getText());
                     if (fxml_bitsToNegate.getText() == null) {
                         fxml_Communicat.setText("Type amount of bits");
                         return;
@@ -146,15 +144,15 @@ public class MainApp extends Application {
                 break;
         }
 
-        System.out.println("Recived message: " + messageFromReciver);
+        System.out.println("Received message: " + messageFromReciver);
 
         if (messageFromReciver != null) {
             fxml_BitsReceiver2.setText(messageFromReciver);
+            fxml_Communicat.setText("");
         } else {
             fxml_Communicat.setText("Problem with decoding");
             fxml_BitsReceiver2.setText("");
         }
-
     }
 
     private AlgorithmType getAlgorithmType() {
@@ -164,12 +162,13 @@ public class MainApp extends Application {
 
         String selected = algorithmGroup.getSelectedToggle().getUserData().toString();
         if (selected != null) {
-            if (selected.equals("triple")) {
-                return AlgorithmType.Triple;
-            } else if (selected.equals("parity")) {
-                return AlgorithmType.Multidimensional;
-            } else if (selected.equals("hamming")) {
-                return AlgorithmType.Hamming;
+            switch (selected) {
+                case "triple":
+                    return AlgorithmType.Triple;
+                case "parity":
+                    return AlgorithmType.Multidimensional;
+                case "hamming":
+                    return AlgorithmType.Hamming;
             }
         }
 

@@ -40,7 +40,6 @@
                               <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                  <children>
                                     <TextField fx:id="fxml_bitsInput" />
-                                    <Button mnemonicParsing="false" onAction="#onSaveBits" prefHeight="36.0" prefWidth="95.0" text="Save" />
                                  </children>
                                  <HBox.margin>
                                     <Insets top="10.0" />
