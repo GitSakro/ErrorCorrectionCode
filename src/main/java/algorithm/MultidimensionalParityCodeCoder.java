@@ -96,19 +96,6 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         }
     }
 
-    // for debug purposes only
-    private void printMatrix(char[][] matrix) {
-        System.out.println("Matrix [" + matrix.length + "][" + matrix[0].length + "]");
-        System.out.println("______");
-        for (char[] carr : matrix) {
-            for (char ch : carr) {
-                System.out.print(ch + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("______");
-    }
-
     private String matrixToString(char[][] matrix) {
         StringBuilder builder = new StringBuilder();
         for (char[] matrixRow : matrix) {
@@ -134,7 +121,6 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
         List<Integer> columnSums = new ArrayList<>();
 
         int count = 0;
-        printMatrix(matrix);
         for (int i = 0; count < contentLength && i + contentLength < message.length(); i += contentLength + MARGIN, ++count) {
             char[] content = message.substring(i, i + contentLength).toCharArray();
             matrix[count] = content;
@@ -166,7 +152,7 @@ public class MultidimensionalParityCodeCoder implements Coder, Decoder {
             return null;
         }
 
-        return matrixToString(matrix);
+        return Utils.convertMessageToBinary(matrixToString(matrix).trim());
     }
 
     private int getEncodedMessageLength(String message) {

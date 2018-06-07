@@ -72,7 +72,7 @@ public class MainApp extends Application {
         String sentMessage = null;
         switch (algType) {
             case Triple:
-                fxml_BitsTransmitter2.setText(message);
+                fxml_BitsTransmitter2.setText(Utils.convertToBinaryString(fxml_bitsInput.getText()));
                 sentMessage = trans.sendMessage(message, new TripleRepetitionCode());
                 break;
             case Multidimensional:
@@ -80,7 +80,7 @@ public class MainApp extends Application {
                 sentMessage = trans.sendMessage(message, new MultidimensionalParityCodeCoder());
                 break;
             case Hamming:
-                fxml_BitsTransmitter2.setText(message);
+                fxml_BitsTransmitter2.setText(Utils.convertToBinaryString(fxml_bitsInput.getText()));
                 sentMessage = trans.sendMessage(message, new HammingCode());
                 break;
         }
