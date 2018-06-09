@@ -16,20 +16,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.Utils;
 
-public class MainApp extends Application {
-    private enum AlgorithmType {Triple, Multidimensional, Hamming}
+import java.io.*;
 
-    ;
+public class MainApp extends Application {
+
+    private enum AlgorithmType {Triple, Multidimensional, Hamming}
 
     private enum NegateType {Bit, Bits}
 
-    ;
+    private Stage primaryStage;
+    private StringBuilder report = new StringBuilder();
+
 
     @FXML
-    public Label fxml_Communicat;
+    public Label fxml_Communicate;
     @FXML
     public TextField fxml_bitsInput, fxml_bitsToNegate;
     @FXML
@@ -39,120 +43,213 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
-
         Scene scene = new Scene(root, 913.0, 434.0);
-        primaryStage.setResizable(false);
 
+        this.primaryStage = primaryStage;
+        primaryStage.setResizable(false);
         primaryStage.setTitle("FXML Welcome");
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
     @FXML
-    private void onStartTransmission(ActionEvent event) {
-        fxml_BitsTransmitter2.setText("");
-        fxml_Communicat.setText("");
-        fxml_BitsReceiver2.setText("");
+    public void onSaveReport(ActionEvent actionEvent) {
+        if (!isReadyToStart()) {
+            return;
+        }
 
+        FileChooser fileChooser = new FileChooser();
+
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        //Show save file dialog
+        File file = fileChooser.showSaveDialog(primaryStage);
+
+        if (file == null) {
+            fxml_Communicate.setText("Can't create file!");
+            return;
+        }
+
+        try (PrintWriter out = new PrintWriter(file)) {
+            String logs = startTransmission();
+            if (logs != null) {
+                out.println(startTransmission());
+            } else {
+                out.println("Something goes wrong!");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean isReadyToStart() {
         String message = fxml_bitsInput.getText();
         AlgorithmType algType = getAlgorithmType();
         NegateType negType = getNegateType();
 
-        if (algType == null || negType == null) {
-            fxml_Communicat.setText("Select algorithm type and negation type");
-            return;
+        if (message == null || algType == null || negType == null) {
+            fxml_Communicate.setText("Select message, algorithm type and negation type");
+            return false;
         }
+        return true;
+    }
 
-        Transmitter trans = new Transmitter();
-        System.out.println("Message to be sent:" + message);
-
-        String sentMessage = null;
-        switch (algType) {
-            case Triple:
-                fxml_BitsTransmitter2.setText(Utils.convertToBinaryString(fxml_bitsInput.getText()));
-                sentMessage = trans.sendMessage(message, new TripleRepetitionCode());
-                break;
-            case Multidimensional:
-                fxml_BitsTransmitter2.setText(Utils.convertMessageToBinary(fxml_bitsInput.getText()));
-                sentMessage = trans.sendMessage(message, new MultidimensionalParityCodeCoder());
-                break;
-            case Hamming:
-                fxml_BitsTransmitter2.setText(Utils.convertToBinaryString(fxml_bitsInput.getText()));
-                sentMessage = trans.sendMessage(message, new HammingCode());
-                break;
+    private String startTransmission() {
+        if (!isReadyToStart()) {
+            return null;
         }
+        report = new StringBuilder();
+        resetFields();
+
+        String message = fxml_bitsInput.getText();
+
+        report.append("Orginal message to be sent: ").append(message).append('\n');
+
+        String sentMessage = sendMessage(message);
 
         if (sentMessage == null) {
-            fxml_Communicat.setText("Problem with encoding message");
-            return;
+            return report.toString();
         }
 
+        report.append("---- START TRANSMISSION ----").append('\n');
+        report.append("Channel message before: ").append(sentMessage).append('\n');
+
         Channel channel = new Channel();
-        System.out.println("StartTransmision");
         channel.startTransmission(sentMessage);
-        System.out.println("Negate random bit");
+        negateBits(channel);
+
+        String channelMessage = channel.endTransmission();
+        if (channelMessage == null) {
+            fxml_BitsChannel2.setText("");
+            String errorMessage = "Problem with communication channel";
+            report.append(errorMessage).append('\n');
+            fxml_Communicate.setText(errorMessage);
+            return report.toString();
+        }
+        report.append("Channel message after: ").append(channelMessage).append('\n');
+
+        fxml_BitsChannel2.setText(channelMessage);
+        String messageFromReceiver = getMessageFromReceiver(channelMessage);
+        report.append("---- END OF TRANSMISSION ----").append('\n');
+        report.append("Received message: ").append(messageFromReceiver).append('\n');
+
+        if (messageFromReceiver != null) {
+            fxml_BitsReceiver2.setText(messageFromReceiver);
+            fxml_Communicate.setText("");
+        } else {
+            fxml_Communicate.setText("Problem with decoding");
+            fxml_BitsReceiver2.setText("");
+        }
+        return report.toString();
+    }
+
+    private void negateBits(Channel channel) {
+        NegateType negType = getNegateType();
 
         switch (negType) {
             case Bit:
+                report.append("Negate random bit").append('\n');
                 channel.negateRandomBit();
                 break;
             case Bits:
                 try {
                     if (fxml_bitsToNegate.getText() == null) {
-                        fxml_Communicat.setText("Type amount of bits");
-                        return;
+                        fxml_Communicate.setText("Type amount of bits");
                     }
-                    channel.negateRandomBits(Integer.parseInt(fxml_bitsToNegate.getText()));
+                    Integer numberOfBits = Integer.parseInt(fxml_bitsToNegate.getText());
+                    report.append("Negate ").append(numberOfBits).append(" random bits").append('\n');
+                    channel.negateRandomBits(numberOfBits);
                 } catch (NumberFormatException e) {
-                    fxml_Communicat.setText("Type amount of bits");
-                    return;
+                    report.append("Type amount of bits").append('\n');
+                    fxml_Communicate.setText("Type amount of bits");
                 }
-
                 break;
         }
+    }
 
-        System.out.println("Number of bits in channel");
-        System.out.println(channel.numberOfBitsInChannel());
-
-        String channelMessage = channel.endTransmission();
-        if (channelMessage == null) {
-            fxml_BitsChannel2.setText("");
-            fxml_Communicat.setText("Problem with communication channel");
-            return;
-        }
-
-        System.out.println("channel message " + channelMessage);
-
-        fxml_BitsChannel2.setText(channelMessage);
-        Receiver reciver = new Receiver();
-
-
-        String messageFromReciver = null;
+    private String getMessageFromReceiver(String channelMessage) {
+        AlgorithmType algType = getAlgorithmType();
+        Receiver receiver = new Receiver();
+        String messageFromReceiver = null;
 
         switch (algType) {
             case Triple:
-                messageFromReciver = reciver.getMessage(channelMessage, new TripleRepetitionCode());
+                messageFromReceiver = receiver.getMessage(channelMessage, new TripleRepetitionCode());
                 break;
             case Multidimensional:
-                messageFromReciver = reciver.getMessage(channelMessage, new MultidimensionalParityCodeCoder());
+                messageFromReceiver = receiver.getMessage(channelMessage, new MultidimensionalParityCodeCoder());
                 break;
             case Hamming:
-                messageFromReciver = reciver.getMessage(channelMessage, new HammingCode());
+                messageFromReceiver = receiver.getMessage(channelMessage, new HammingCode());
                 break;
         }
+        return messageFromReceiver;
+    }
 
-        System.out.println("Received message: " + messageFromReciver);
-
-        if (messageFromReciver != null) {
-            fxml_BitsReceiver2.setText(messageFromReciver);
-            fxml_Communicat.setText("");
-        } else {
-            fxml_Communicat.setText("Problem with decoding");
-            fxml_BitsReceiver2.setText("");
+    private String sendMessage(String message) {
+        AlgorithmType algType = getAlgorithmType();
+        Transmitter trans = new Transmitter();
+        String sentMessage = null;
+        try {
+            switch (algType) {
+                case Triple:
+                    fxml_BitsTransmitter2.setText(Utils.convertToBinaryString(fxml_bitsInput.getText()));
+                    sentMessage = trans.sendMessage(message, new TripleRepetitionCode());
+                    break;
+                case Multidimensional:
+                    fxml_BitsTransmitter2.setText(Utils.convertMessageToBinary(fxml_bitsInput.getText()));
+                    sentMessage = trans.sendMessage(message, new MultidimensionalParityCodeCoder());
+                    break;
+                case Hamming:
+                    fxml_BitsTransmitter2.setText(Utils.convertToBinaryString(fxml_bitsInput.getText()));
+                    sentMessage = trans.sendMessage(message, new HammingCode());
+                    break;
+            }
+        } catch (NumberFormatException e) {
+            resetFields();
+            String errorMessage = "Input is to big! Choose normal number";
+            report.append(errorMessage).append('\n');
+            fxml_Communicate.setText(errorMessage);
+            return null;
         }
+        if (sentMessage == null) {
+            String errorMessage = "Problem with encoding message";
+            report.append(errorMessage).append('\n');
+            fxml_Communicate.setText(errorMessage);
+        }
+        return sentMessage;
+    }
+
+    private void resetFields() {
+        fxml_BitsTransmitter2.setText("");
+        fxml_Communicate.setText("");
+        fxml_BitsReceiver2.setText("");
+    }
+
+    @FXML
+    public void onFromFile(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
+        String input = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                input = line;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fxml_bitsInput.setText(input);
+    }
+
+    @FXML
+    private void onStartTransmission(ActionEvent event) {
+        startTransmission();
     }
 
     private AlgorithmType getAlgorithmType() {
@@ -171,7 +268,6 @@ public class MainApp extends Application {
                     return AlgorithmType.Hamming;
             }
         }
-
         return null;
     }
 
@@ -188,7 +284,6 @@ public class MainApp extends Application {
                 return NegateType.Bits;
             }
         }
-
         return null;
     }
 

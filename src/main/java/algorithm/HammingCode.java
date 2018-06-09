@@ -24,6 +24,11 @@ public class HammingCode implements Coder, Decoder {
         int bitsNeeded = checkBitsNeeded(message);
         ArrayList<Integer> positiveBitsPosition = getPositiveBitsPosition(message);
         ArrayList<Integer> parityBits = getParityBits(positiveBitsPosition, bitsNeeded);
+        if(parityBits.isEmpty()) {
+            for(int i = 0; i < bitsNeeded; ++i) {
+                parityBits.add(0);
+            }
+        }
         Collections.reverse(parityBits);
 
         for (int i = 0, powerOfTwo = 1; i < bitsNeeded; ++i, powerOfTwo *= 2) {
@@ -39,6 +44,7 @@ public class HammingCode implements Coder, Decoder {
             System.err.println("Message corrupted");
             return null;
         }
+        message = convertToBinaryString(message);
         message = new StringBuilder(message).reverse().toString();
 
         int bitsNeeded = checkBitsNeeded(message);
@@ -51,7 +57,7 @@ public class HammingCode implements Coder, Decoder {
                 binaryNumber.append(bit);
             }
             int binaryPosition = Integer.parseInt(binaryNumber.toString(), 2);
-            if(binaryPosition >= message.length()) {
+            if(binaryPosition > message.length()) {
                 System.err.println("Message corrupted");
                 return null;
             }

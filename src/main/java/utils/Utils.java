@@ -6,8 +6,9 @@ public class Utils {
     private static final String nonABinary = "[^01]";
     private static String SPACE_BIT_REPRESENTATION = "1111";
 
-    public static String convertToBinaryString(String message) {
+    public static String convertToBinaryString(String message) throws NumberFormatException {
         String returnMessage = message;
+
         if (Pattern.compile(nonABinary).matcher(message).find()) {
             returnMessage = Integer.toBinaryString(Integer.parseInt(returnMessage));
         }

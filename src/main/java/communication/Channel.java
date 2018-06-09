@@ -11,14 +11,10 @@ public class Channel {
 
     public void negateRandomBit() {
         int bitToNegate = getRandomBit();
-        System.out.println("Before negation: " + inMessage);
         negateBitAtPosition(bitToNegate);
-        System.out.println("After negation: " + inMessage);
     }
 
-    // TODO: AREK SHOULD FIX
     private void negateBitAtPosition(int position) {
-//        inMessage = inMessage.substring(0, position) + reverseBit(inMessage.charAt(position)) + inMessage.substring(position+1);
         StringBuilder builder = new StringBuilder(inMessage);
         builder.setCharAt(position,reverseBit(inMessage.charAt(position)));
         inMessage = builder.toString();

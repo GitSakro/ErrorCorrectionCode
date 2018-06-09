@@ -8,9 +8,7 @@ import java.util.List;
 public class MultidimensionalParityCodeCoder implements Coder, Decoder {
     private static final int MARGIN = 4;
 
-    private enum Type {ROW, COLUMN;}
-
-    ;
+    private enum Type {ROW, COLUMN}
 
     @Override
     public String encode(String message) {
