@@ -51,6 +51,10 @@ public class HammingCode implements Coder, Decoder {
                 binaryNumber.append(bit);
             }
             int binaryPosition = Integer.parseInt(binaryNumber.toString(), 2);
+            if(binaryPosition >= message.length()) {
+                System.err.println("Message corrupted");
+                return null;
+            }
             message = message.substring(0, binaryPosition - 1) + (message.charAt(binaryPosition - 1) == '1' ? 0 : 1) + message.substring(binaryPosition, message.length());
         }
         StringBuilder result = new StringBuilder();
