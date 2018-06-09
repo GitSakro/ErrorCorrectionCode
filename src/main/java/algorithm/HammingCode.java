@@ -3,6 +3,7 @@ package algorithm;
 import utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static utils.Utils.convertToBinaryString;
 import static utils.Utils.searchNonDigit;
@@ -12,8 +13,7 @@ public class HammingCode implements Coder, Decoder {
     @Override
     public String encode(String message) {
 
-        if(!searchNonDigit(message))
-        {
+        if (!searchNonDigit(message)) {
             System.err.println("Message: " + message + " contains non digit. Illegal form, aborting!");
             return message;
         }
@@ -24,6 +24,7 @@ public class HammingCode implements Coder, Decoder {
         int bitsNeeded = checkBitsNeeded(message);
         ArrayList<Integer> positiveBitsPosition = getPositiveBitsPosition(message);
         ArrayList<Integer> parityBits = getParityBits(positiveBitsPosition, bitsNeeded);
+        Collections.reverse(parityBits);
 
         for (int i = 0, powerOfTwo = 1; i < bitsNeeded; ++i, powerOfTwo *= 2) {
             message = message.substring(0, powerOfTwo - 1) + parityBits.get(i) + message.substring(powerOfTwo, message.length());
@@ -59,8 +60,8 @@ public class HammingCode implements Coder, Decoder {
             lastIndex = i;
         }
         result.append(message.substring(lastIndex, message.length()));
-
-        return new StringBuilder(result.toString()).reverse().toString();
+        result.reverse();
+        return result.toString();
     }
 
     private int checkBitsNeeded(String message) {
@@ -95,12 +96,13 @@ public class HammingCode implements Coder, Decoder {
         for (int i = 0; i < parityBits.size(); ++i) {
             parityBits.set(i, parityBits.get(i) % 2 == 0 ? 0 : 1);
         }
+        Collections.reverse(parityBits);
 
         return parityBits;
     }
 
     private String addHammingSigns(String message) {
-        for (int i = 1; i < message.length(); i = i * 2) {
+        for (int i = 1; i <= message.length(); i = i * 2) {
             message = message.substring(0, i - 1) + "H" + message.substring(i - 1, message.length());
         }
         return message;
