@@ -225,8 +225,9 @@ public class MainApp extends Application {
 
     private void resetFields() {
         fxml_BitsTransmitter2.setText("");
-        fxml_Communicate.setText("");
+        fxml_BitsChannel2.setText("");
         fxml_BitsReceiver2.setText("");
+        fxml_Communicate.setText("");
     }
 
     @FXML
@@ -234,17 +235,19 @@ public class MainApp extends Application {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
         String input = null;
-        try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+        if(selectedFile != null) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                input = line;
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    input = line;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        fxml_bitsInput.setText(input);
+        fxml_bitsInput.setText(input == null ? "" : input);
     }
 
     @FXML
